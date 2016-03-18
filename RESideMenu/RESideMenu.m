@@ -311,6 +311,8 @@
         
         self.visible = YES;
         self.leftMenuVisible = YES;
+        
+        [self updateContentViewCornerRadius];
     }];
     
     [self statusBarNeedsAppearanceUpdate];
@@ -354,6 +356,7 @@
         self.rightMenuVisible = self.visible;
         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         [self addContentViewControllerMotionEffects];
+        [self updateContentViewCornerRadius];
     }];
     
     [self statusBarNeedsAppearanceUpdate];
@@ -461,6 +464,16 @@
         layer.shadowOffset = self.contentViewShadowOffset;
         layer.shadowOpacity = self.contentViewShadowOpacity;
         layer.shadowRadius = self.contentViewShadowRadius;
+    }
+}
+
+- (void)updateContentViewCornerRadius
+{
+    if (self.visible) {
+        self.contentViewContainer.subviews[0].layer.cornerRadius = 6;
+        self.contentViewContainer.subviews[0].layer.masksToBounds = YES;
+    } else {
+        self.contentViewContainer.subviews[0].layer.cornerRadius = 0;
     }
 }
 
@@ -575,6 +588,7 @@
         [self addContentButton];
         [self.view.window endEditing:YES];
         self.didNotifyDelegate = NO;
+        [self updateContentViewCornerRadius];
     }
     
     if (recognizer.state == UIGestureRecognizerStateChanged) {
@@ -670,6 +684,7 @@
         }
         
         [self statusBarNeedsAppearanceUpdate];
+        [self updateContentViewCornerRadius];
     }
     
    if (recognizer.state == UIGestureRecognizerStateEnded) {
