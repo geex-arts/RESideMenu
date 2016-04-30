@@ -111,6 +111,7 @@
     _contentViewShadowOffset = CGSizeZero;
     _contentViewShadowOpacity = 0.4f;
     _contentViewShadowRadius = 8.0f;
+    _contentViewCornerRadius = 6.0f;
     _contentViewFadeOutAlpha = 1.0f;
     _contentViewInLandscapeOffsetCenterX = 30.f;
     _contentViewInPortraitOffsetCenterX  = 30.f;
@@ -471,7 +472,7 @@
 - (void)setContentViewCornerRadiusVisible:(BOOL)visible
 {
     if (visible) {
-        self.contentViewContainer.subviews[0].layer.cornerRadius = 6;
+        self.contentViewContainer.subviews[0].layer.cornerRadius = self.contentViewCornerRadius;
         self.contentViewContainer.subviews[0].layer.masksToBounds = YES;
     } else {
         self.contentViewContainer.subviews[0].layer.cornerRadius = 0;
@@ -480,12 +481,7 @@
 
 - (void)updateContentViewCornerRadius
 {
-    if (self.visible) {
-        self.contentViewContainer.subviews[0].layer.cornerRadius = 6;
-        self.contentViewContainer.subviews[0].layer.masksToBounds = YES;
-    } else {
-        self.contentViewContainer.subviews[0].layer.cornerRadius = 0;
-    }
+    [self setContentViewCornerRadiusVisible:self.visible];
 }
 
 - (void)resetContentViewScale
