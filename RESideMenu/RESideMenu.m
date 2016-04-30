@@ -417,6 +417,7 @@
         if (!strongSelf.visible && [strongSelf.delegate conformsToProtocol:@protocol(RESideMenuDelegate)] && [strongSelf.delegate respondsToSelector:@selector(sideMenu:didHideMenuViewController:)]) {
             [strongSelf.delegate sideMenu:strongSelf didHideMenuViewController:rightMenuVisible ? strongSelf.rightMenuViewController : strongSelf.leftMenuViewController];
         }
+        [strongSelf updateContentViewCornerRadius];
     };
     
     if (animated) {
@@ -464,6 +465,16 @@
         layer.shadowOffset = self.contentViewShadowOffset;
         layer.shadowOpacity = self.contentViewShadowOpacity;
         layer.shadowRadius = self.contentViewShadowRadius;
+    }
+}
+
+- (void)setContentViewCornerRadiusVisible:(BOOL)visible
+{
+    if (visible) {
+        self.contentViewContainer.subviews[0].layer.cornerRadius = 6;
+        self.contentViewContainer.subviews[0].layer.masksToBounds = YES;
+    } else {
+        self.contentViewContainer.subviews[0].layer.cornerRadius = 0;
     }
 }
 
@@ -671,6 +682,8 @@
         self.leftMenuViewController.view.hidden = self.contentViewContainer.frame.origin.x < 0;
         self.rightMenuViewController.view.hidden = self.contentViewContainer.frame.origin.x > 0;
         
+        BOOL cornerRadiusVisible = NO;
+        
         if (!self.leftMenuViewController && self.contentViewContainer.frame.origin.x > 0) {
             self.contentViewContainer.transform = CGAffineTransformIdentity;
             self.contentViewContainer.frame = self.view.bounds;
@@ -681,10 +694,12 @@
             self.contentViewContainer.frame = self.view.bounds;
             self.visible = NO;
             self.rightMenuVisible = NO;
+        } else {
+            cornerRadiusVisible = YES;
         }
         
         [self statusBarNeedsAppearanceUpdate];
-        [self updateContentViewCornerRadius];
+        [self setContentViewCornerRadiusVisible:cornerRadiusVisible];
     }
     
    if (recognizer.state == UIGestureRecognizerStateEnded) {
